@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <!-- Motif redessiné d'après le bardage noir à facettes de la façade -->
+  <rect width="96" height="96" fill="#171513"/>
+  <path d="M48 0 52 44 96 48Z" fill="#26231F"/><path d="M48 0 52 44 0 48Z" fill="#1F1C19"/>
+  <path d="M0 48 52 44 48 96Z" fill="#100E0D"/><path d="M96 48 52 44 48 96Z" fill="#1B1816"/>
+  <path d="M0 0H48L4 4Z" fill="#100E0D"/><path d="M0 0V48L4 4Z" fill="#1B1816"/>
+  <path d="M96 0H48L92 4Z" fill="#100E0D"/><path d="M96 0V48L92 4Z" fill="#26231F"/>
+  <path d="M0 96H48L4 92Z" fill="#26231F"/><path d="M0 96V48L4 92Z" fill="#1F1C19"/>
+  <path d="M96 96H48L92 92Z" fill="#1F1C19"/><path d="M96 96V48L92 92Z" fill="#100E0D"/>
+</svg>

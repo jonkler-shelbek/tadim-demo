@@ -1,0 +1,304 @@
+@font-face { font-family: "Gloock"; src: url("fonts/Gloock-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Instrument Sans"; src: url("fonts/InstrumentSans-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Instrument Sans"; src: url("fonts/InstrumentSans-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+
+:root {
+  /* Couleurs prises sur la façade : bardage noir, lettres ivoire, flamme rouge, lumière ambrée */
+  --facade: #171513;
+  --ivoire: #F3E7CF;
+  --papier: #FBF3E2;
+  --encre: #1E1916;
+  --flamme: #C21E16;
+  --flamme-fonce: #991510;
+  --ambre: #F2B04E;
+  --discret: #5F5347;
+  --titre: "Gloock", Georgia, serif;
+  --gouttiere: clamp(16px, 5vw, 72px);
+  --sortie: cubic-bezier(.23, 1, .32, 1);
+  color-scheme: dark light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  background: var(--facade); color: var(--ivoire);
+  font: 17px/1.5 "Instrument Sans", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  font-variant-numeric: tabular-nums;
+  scrollbar-color: #6B5F52 var(--facade);
+  scrollbar-gutter: stable;
+  /* Un lien atteint au clavier ne passe jamais sous les barres fixes */
+  scroll-padding: 72px 0 76px;
+}
+html.bloque { overflow: hidden; }
+body { margin: 0; padding-bottom: calc(58px + env(safe-area-inset-bottom)); }
+h1, h2, h3, h4, p, ul, dl, dd, figure, address { margin: 0; padding: 0; font-style: normal; }
+ul { list-style: none; }
+img { max-width: 100%; height: auto; }
+a { color: inherit; text-underline-offset: 4px; }
+h2, h3 { font-family: var(--titre); font-weight: 400; line-height: 1.04; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-size: clamp(42px, 6.4vw, 92px); }
+::selection { background: var(--ambre); color: var(--encre); }
+:focus-visible { outline: 3px solid #1560A8; outline-offset: 3px; }
+.facade :focus-visible, .carte :focus-visible, .pied :focus-visible, .barre :focus-visible, dialog :focus-visible, .partage :focus-visible, .demo :focus-visible, .onglets :focus-visible { outline-color: var(--ambre); }
+.i { display: inline-block; width: .72em; height: .72em; vertical-align: baseline; margin-left: .1em; }
+.sprite { position: absolute; }
+.lecteur { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.evitement { position: absolute; left: -9999px; top: 8px; z-index: 30; background: var(--papier); color: var(--encre); padding: 10px 16px; }
+.evitement:focus { left: 8px; }
+
+.demo { background: var(--encre); color: var(--ivoire); font-size: 13px; line-height: 1.35; padding: 8px var(--gouttiere); }
+
+/* La façade : bardage à facettes, enseigne au centre */
+.facade { background: var(--facade) url("images/facettes.svg") center top / 72px; color: var(--ivoire); padding: 4px var(--gouttiere) 26px; }
+.haut { display: flex; justify-content: flex-end; gap: clamp(14px, 3vw, 36px); }
+.haut a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; text-decoration: none; }
+.haut-tel { display: none !important; }
+h1 { margin: 2px auto 0; max-width: 980px; }
+.enseigne { display: block; width: 100%; height: auto; }
+.chapo { max-width: 36ch; margin: 12px auto 0; font-size: 20px; line-height: 1.32; text-align: center; text-wrap: balance; }
+
+/* Sous l'enseigne, la vitrine : une grande photo et le ticket pratique */
+.vitrine { display: grid; grid-template-columns: minmax(0, 1fr); background: var(--papier); color: var(--encre); }
+.ticket { order: -1; background: var(--papier); padding: 18px var(--gouttiere) 22px; }
+.reperes > div { display: grid; grid-template-columns: 5.2em 1fr; gap: 8px; padding: 5px 0; }
+.reperes dt { font-weight: 700; }
+.etat { display: block; font-weight: 700; color: var(--flamme); }
+.etat:empty { display: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.actions .btn { flex: 1 1 100%; }
+.actions .secondaire { display: none; }
+.vitrine-photo { position: relative; background: var(--encre); }
+.vitrine-photo img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 60% 70%; }
+.vitrine-photo figcaption { position: absolute; left: 0; bottom: 0; background: var(--encre); color: var(--ivoire); font-size: 13px; padding: 4px var(--gouttiere); }
+
+.onglets { display: flex; gap: 4px; background: var(--papier); padding: 14px 8px 0; }
+.onglets a {
+  flex: 1 1 0; display: flex; align-items: center; justify-content: center; min-height: 46px; padding: 6px 12px 0;
+  font-weight: 700; font-size: 15px; text-align: center; text-decoration: none; line-height: 1.1;
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+  background: var(--encre); color: var(--ivoire);
+  transition: transform .16s var(--sortie);
+}
+.onglets a:nth-child(2) { background: var(--flamme); color: #fff; }
+.onglets a:nth-child(3) { background: var(--ambre); color: var(--encre); }
+.onglets a:nth-child(4) { background: #5B3A1E; color: var(--ivoire); }
+
+/* Boutons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .3em; min-height: 52px; padding: 10px 24px;
+  font-weight: 700; text-decoration: none; transition: background-color .15s ease, color .15s ease, transform .1s var(--sortie);
+}
+.btn-plein { background: var(--flamme); color: #fff; }
+.btn-ligne { background: var(--encre); color: var(--ivoire); }
+
+/* Comparer */
+.comparer { background: var(--encre); color: var(--ivoire); padding: 56px var(--gouttiere) 64px; }
+.comparer h2 { margin-bottom: 26px; }
+.duo { display: grid; gap: 16px; }
+.choix { background: var(--papier); color: var(--encre); display: flex; flex-direction: column; }
+.choix.partage { background: var(--flamme); color: #fff; }
+.choix-photo { display: block; overflow: hidden; }
+.choix-photo img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .5s var(--sortie); }
+.choix-texte { padding: 20px 20px 22px; display: flex; flex-direction: column; flex: 1; }
+.choix h3 { font-size: 34px; margin-bottom: 10px; }
+.choix ul { flex: 1; margin-bottom: 14px; }
+.ligne-simple { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 8px 0; }
+.nom small { display: block; font-size: 15px; line-height: 1.35; }
+.prix { font-weight: 700; font-size: 17px; white-space: nowrap; flex: none; }
+.prix.absent { font-weight: 400; font-size: 15px; }
+.choix .note { font-size: 15px; margin-bottom: 12px; }
+.liens { display: flex; flex-wrap: wrap; gap: 0 18px; }
+.liens a { font-weight: 700; display: inline-flex; align-items: center; min-height: 44px; }
+
+/* La carte : une feuille imprimée posée sur le bardage */
+.carte { background: var(--facade) url("images/facettes.svg") center top / 72px; color: var(--ivoire); padding: 56px var(--gouttiere) 72px; }
+.lecture { display: grid; gap: 10px; margin: 16px 0 8px; max-width: 52ch; }
+.lecture b { color: var(--ambre); }
+.rubriques { margin: 14px 0 22px; padding: 7px var(--gouttiere); background: var(--facade); display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.rubriques::-webkit-scrollbar { display: none; }
+.rubriques a { flex: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-weight: 700; font-size: 15px; text-decoration: none; white-space: nowrap; transition: background-color .15s ease, color .15s ease; }
+.rubriques a[aria-current="true"] { background: var(--ambre); color: var(--encre); }
+
+.feuille { position: relative; background: var(--papier); color: var(--encre); padding: 18px 16px 34px; margin: 14px -6px; }
+.feuille::before, .feuille::after { content: ""; position: absolute; left: 0; right: 0; height: 14px; background: url("images/feston.svg") left bottom / 28px 14px repeat-x; }
+.feuille::before { top: -14px; }
+.feuille::after { bottom: -14px; transform: scaleY(-1); }
+.bloc { padding-top: 40px; }
+.bloc:first-child { padding-top: 22px; }
+.bloc h3 { font-size: 34px; margin-bottom: 6px; display: inline-block; position: relative; }
+.bloc h3::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 3px; background: var(--flamme); transform: scaleX(0); transform-origin: left; }
+.bloc h4 { font-size: 17px; font-weight: 700; margin: 14px 0 8px; }
+.bloc-note { font-size: 15px; color: var(--discret); margin-bottom: 4px; }
+.ligne {
+  display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 12px;
+  padding: 6px; margin: 0 -6px; text-decoration: none; transition: background-color .15s ease;
+}
+.vignette { display: block; object-fit: cover; background: #E9DABA; }
+.ligne .vignette { width: 72px; height: 72px; }
+.ligne .nom { font-weight: 400; line-height: 1.25; }
+.ligne:active .vignette { transform: scale(.97); }
+.ligne-simple .nom { line-height: 1.3; }
+.pastilles { display: flex; flex-wrap: wrap; gap: 6px; }
+.pastille { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding-right: 12px; background: #F1E5CC; text-decoration: none; font-size: 15px; line-height: 1.15; transition: background-color .15s ease; }
+.pastille img { width: 44px; height: 44px; object-fit: cover; display: block; flex: none; }
+
+/* Téléphone : seule la barre des rubriques reste, collée en haut */
+.colonne { position: sticky; top: 0; z-index: 10; margin-inline: calc(var(--gouttiere) * -1); }
+.apercu { display: none; }
+
+/* Galerie */
+.galerie { background: var(--papier); color: var(--encre); padding: 64px var(--gouttiere); }
+.galerie-note { margin: 10px 0 24px; }
+.tuiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tuile { display: block; text-decoration: none; height: 100%; display: flex; flex-direction: column; }
+.tuile .vignette { width: 100%; aspect-ratio: 1; }
+.etiquette { flex: 1; display: flex; justify-content: space-between; gap: 8px; padding: 10px; line-height: 1.2; background: var(--encre); color: var(--ivoire); font-size: 15px; }
+.etiquette .prix { font-size: 15px; }
+.etiquette .prix.absent { font-size: 13px; }
+.tuiles li:nth-child(4n+2) .etiquette { background: var(--flamme); color: #fff; }
+.tuiles li:nth-child(4n+3) .etiquette { background: var(--ambre); color: var(--encre); }
+.tuiles li:nth-child(4n+4) .etiquette { background: #5B3A1E; color: var(--ivoire); }
+
+/* Venir : le carton posé sur la photo */
+.venir { position: relative; background: var(--encre); padding-bottom: 28px; }
+.venir-figure { position: relative; overflow: hidden; }
+/* Un mur de plats : ces visuels sont trop petits pour le plein écran, mais nets à cette taille */
+.mur { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mur img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; background: #3A2A1E; }
+.mur img:nth-child(n+13) { display: none; }
+.venir-figure figcaption { position: absolute; left: 0; top: 0; background: var(--encre); color: var(--ivoire); font-size: 13px; padding: 4px var(--gouttiere); }
+.carton { position: relative; margin: -80px 16px 0; background: var(--papier); color: var(--encre); padding: 26px 22px; }
+.carton h2 { font-size: 34px; margin-bottom: 12px; }
+.carton address { font-size: 20px; line-height: 1.3; font-weight: 700; }
+.telephone { display: inline-flex; align-items: center; min-height: 48px; font: 400 34px/1.1 var(--titre); color: var(--flamme); }
+.carton > p { margin-bottom: 14px; }
+.carton .btn { width: 100%; }
+.pratique { margin-top: 16px; display: grid; gap: 10px; font-size: 15px; }
+.pratique a { font-weight: 700; }
+
+/* Maquette */
+.maquette { background: var(--ivoire); color: var(--encre); padding: 56px var(--gouttiere); }
+.maquette h2 { font-size: clamp(34px, 4.6vw, 60px); margin-bottom: 18px; }
+.maquette > ul { display: grid; gap: 14px; }
+.maquette li { max-width: 54ch; }
+.lien-credits { display: inline-flex; align-items: center; min-height: 48px; margin-top: 14px; font-weight: 700; }
+.page-credits { background: var(--ivoire); color: var(--encre); padding: 40px var(--gouttiere) 64px; }
+.page-credits h1 { margin: 0 0 16px; max-width: none; font: 400 clamp(34px, 4.6vw, 60px)/1.04 var(--titre); }
+.page-credits ul { display: grid; gap: 8px; max-width: 54ch; margin-top: 18px; overflow-wrap: anywhere; }
+.page-credits > p { max-width: 54ch; }
+
+.pied { background: var(--facade) url("images/facettes.svg") center top / 72px; color: var(--ivoire); padding: 40px var(--gouttiere) 22px; text-align: center; }
+.enseigne-pied { display: block; width: min(100%, 720px); height: auto; margin: 0 auto 16px; }
+.pied p { font-size: 15px; }
+.pied a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Barre d'action sur téléphone */
+.barre { position: fixed; inset: auto 0 0 0; z-index: 20; display: grid; grid-template-columns: 1fr 1fr; background: var(--encre); padding-bottom: env(safe-area-inset-bottom); }
+.barre a { display: flex; align-items: center; justify-content: center; gap: .3em; min-height: 58px; font-weight: 700; color: #fff; text-decoration: none; background: var(--flamme); }
+.barre a + a { background: var(--encre); color: var(--ivoire); }
+
+/* La photo ouverte */
+dialog { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: var(--ivoire); overflow: hidden; }
+dialog::backdrop { background: transparent; }
+.v-fond { position: absolute; inset: 0; background: #0E0C0B; opacity: .94; }
+.v-figure { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 60px 16px 20px; }
+.v-cadre { position: relative; display: block; line-height: 0; touch-action: none; }
+#v-img { display: block; width: min(var(--largeur-nette, 960px), 100vw - 32px); height: auto; max-height: calc(100svh - 210px); object-fit: contain; will-change: transform; user-select: none; -webkit-user-drag: none; }
+.v-legende { width: min(var(--largeur-nette, 960px), 100%); position: relative; }
+.v-titre { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; font: 400 34px/1.1 var(--titre); }
+#v-prix { font: 700 20px/1.2 "Instrument Sans", system-ui, sans-serif; white-space: nowrap; color: var(--ambre); }
+.v-note { font-size: 15px; margin-top: 4px; line-height: 1.35; }
+.v-fermer { position: absolute; top: 8px; right: 8px; z-index: 2; width: 48px; height: 48px; display: grid; place-items: center; border: 0; background: var(--ivoire); color: var(--encre); cursor: pointer; transition: transform .1s var(--sortie); }
+.v-fermer svg { width: 18px; height: 18px; }
+.v-loupe { position: absolute; left: 0; top: 0; width: 170px; height: 170px; border-radius: 50%; pointer-events: none; opacity: 0; background-color: #0E0C0B; background-repeat: no-repeat; box-shadow: 0 0 0 2px var(--ivoire), 0 10px 30px rgb(0 0 0 / .45); /* taste-skill-ignore : la loupe flotte vraiment au-dessus de la photo */ transition: opacity .15s ease; }
+.v-loupe.active { opacity: 1; }
+
+/* Survol réservé aux pointeurs précis */
+@media (hover: hover) and (pointer: fine) {
+  .btn-plein:hover { background: var(--flamme-fonce); }
+  .btn-ligne:hover { background: #3A322B; }
+  .onglets a:hover { transform: translateY(-3px); }
+  .rubriques a:not([aria-current="true"]):hover { background: #3A352E; }
+  .ligne:hover { background: #F1E5CC; }
+  .pastille:hover { background: #E9DABA; }
+  .choix-photo:hover img { transform: scale(1.03); }
+  .tuile:hover .nom { text-decoration: underline; }
+  .v-fermer:hover { background: var(--ambre); }
+  #v-img.avec-loupe { cursor: zoom-in; }
+}
+
+@media (min-width: 700px) {
+  .duo { grid-template-columns: 1fr 1fr; }
+  .actions .btn { flex: 0 1 auto; }
+  .actions .secondaire { display: inline-flex; }
+  .tuiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .feuille { padding: 24px 32px 40px; margin-inline: 0; }
+  .haut-tel { display: inline-flex !important; }
+  .onglets { padding-inline: var(--gouttiere); }
+  .onglets a { font-size: 17px; }
+}
+
+@media (min-width: 1040px) {
+  html { scroll-padding: 16px 0 0; }
+  body { padding-bottom: 0; }
+  .barre { display: none; }
+  .facade { padding-bottom: 30px; }
+  h1 { max-width: min(980px, 62vw); }
+  .chapo { max-width: 60ch; }
+
+  .vitrine { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+  .ticket { order: 0; padding: 30px var(--gouttiere) 30px 36px; display: flex; flex-direction: column; justify-content: center; }
+  .reperes > div { padding: 7px 0; }
+  .actions { margin-top: 20px; }
+  .vitrine-photo { min-height: 430px; }
+  .vitrine-photo img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+  .onglets { grid-column: 1 / -1; }
+
+  .comparer, .carte, .galerie { padding-block: 96px; }
+  .lecture { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; max-width: none; }
+  .maquette > ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 48px; }
+  .choix { flex-direction: row; }
+  .choix-photo { flex: 0 0 42%; }
+  .choix-photo img { height: 100%; aspect-ratio: auto; }
+
+  .carte-grille { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 48px; align-items: start; margin-top: 44px; }
+  .colonne { grid-column: 2; grid-row: 1; top: 20px; margin-inline: 0; }
+  .rubriques { flex-wrap: wrap; overflow: visible; margin: 14px 0 0; padding: 0; background: transparent; }
+  .rubriques a { min-height: 36px; padding: 0 10px; }
+  .feuille { grid-column: 1; grid-row: 1; padding: 28px 48px 48px; margin-block: 14px; }
+  .apercu { display: block; }
+  .apercu-cadre { position: relative; aspect-ratio: 1; max-width: min(400px, 100svh - 330px); background: #0E0C0B; overflow: hidden; }
+  .apercu-cadre img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .24s ease; }
+  .apercu-cadre img.visible { opacity: 1; }
+  .apercu-nom { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-top: 12px; font: 400 34px/1.08 var(--titre); }
+  #apercu-prix { font: 700 20px/1.2 "Instrument Sans", system-ui, sans-serif; color: var(--ambre); white-space: nowrap; }
+  .apercu-note { font-size: 15px; margin-top: 4px; }
+
+  .venir { padding-bottom: 0; min-height: 100svh; }
+  .venir-figure { position: absolute; inset: 0; }
+  .mur { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .mur img:nth-child(n+13) { display: block; }
+  .carton { position: absolute; top: 60px; right: var(--gouttiere); width: 440px; margin: 0; padding: 32px; }
+  .venir { min-height: 820px; }
+  .v-figure { padding-top: 24px; }
+  #v-img { max-height: calc(100svh - 170px); }
+}
+
+/* Mouvement : le contenu est toujours lisible sans lui */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .btn:active, .v-fermer:active { transform: scale(.97); }
+  .flamme { transform-box: fill-box; transform-origin: 50% 100%; animation: allumage .9s var(--sortie) .15s both; }
+  @keyframes allumage { from { opacity: 0; transform: scale(.82); } }
+  .bloc:target h3::after { animation: repere 1s var(--sortie) both; }
+  @keyframes repere { to { transform: scaleX(1); } }
+  .js-entrees .entree { opacity: 0; transform: translateY(22px); transition: opacity .6s var(--sortie), transform .6s var(--sortie); transition-delay: var(--retard, 0ms); }
+  .js-entrees .entree.vu { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bloc:target h3::after { transform: scaleX(1); }
+  .btn, .rubriques a, .onglets a, .choix-photo img, .v-fermer { transition: none; }
+}
+@media (prefers-contrast: more) {
+  .v-fond { opacity: 1; }
+}
