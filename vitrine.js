@@ -125,7 +125,7 @@
     dialogue.style.setProperty('--largeur-nette', Math.min(Math.round(info.l * 1.5), 960) + 'px');
     loupePossible = info.l >= 900;
     image.classList.toggle('avec-loupe', loupePossible);
-    image.alt = (info.u ? 'Photo d’illustration : ' : 'Visuel de présentation : ') + texte.nom;
+    image.alt = texte.nom;
     image.src = info.f;
     loupe.style.backgroundImage = 'url("' + info.f + '")';
 
